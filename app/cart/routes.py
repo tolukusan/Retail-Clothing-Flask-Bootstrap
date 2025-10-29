@@ -182,11 +182,14 @@ def checkout():
         # a. Deduct from user wallet
         current_user.wallet_balance -= grand_total
         
-        # b. Create new Order
+        # b. Create new Order - UPDATED to match your Order model
         new_order = Order(
             user_id=current_user.user_id,
-            total_amount=grand_total,
-            shipping_cost=shipping
+            sub_total=subtotal,  # Changed from total_amount
+            grand_total=grand_total,  # Changed from total_amount
+            shipping_cost=shipping,
+            payment_method="Wallet"  # Added required field
+            # order_date and status have defaults
         )
         db.session.add(new_order)
         db.session.flush() # Needed to get new_order.order_id

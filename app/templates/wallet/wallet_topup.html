@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Top Up Wallet{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="fw-light my-3">Wallet Top-Up</h3>
+            </div>
+            <div class="card-body">
+                <!-- Display the current balance -->
+                <div class="alert alert-info text-center fs-4">
+                    Current Balance: <span class="fw-bold text-dark">£{{ current_user.wallet_balance|round(2) }}</span>
+                </div>
+                
+                <!-- The form posts back to the wallet.top_up_wallet route -->
+                <form method="POST" action="{{ url_for('wallet.top_up_wallet') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="form-floating mb-3">
+                        <!-- WalletTopUpForm has a DecimalField named 'amount' -->
+                        {{ form.amount(class="form-control", placeholder="e.g., 50.00") }}
+                        {{ form.amount.label(for="amount") }}
+                        {% for error in form.amount.errors %}
+                            <small class="text-danger">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-success btn-lg mt-3") }}
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <a href="{{ url_for('wallet.wallet_home') }}" class="text-muted">Return to Wallet Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

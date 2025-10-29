@@ -25,6 +25,8 @@ def create_app():
     login_manager.login_message = "Please log in to access this page."
     login_manager.login_message_category = "info"
 
+    from . import models
+    
     # User loader (required by Flask-Login)
     @login_manager.user_loader
     def load_user(user_id):
@@ -32,16 +34,16 @@ def create_app():
 
         return User.query.get(int(user_id))
 
-    from . import models
-
     
     # Import and register routes
     from app.main import main_bp
     from app.auth import auth_bp
     from app.cart import cart_bp
+    from app.wallet import wallet_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(cart_bp)
+    app.register_blueprint(wallet_bp)
 
     return app

@@ -1,6 +1,7 @@
-# Import the db object from your application package
+# app/models.py
 from . import db
 from flask_login import UserMixin  # A helper class for user authentication
+from decimal import Decimal
 
 
 # --- 1. User Table ---
@@ -54,13 +55,15 @@ class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     order_date = db.Column(db.DateTime, default=db.func.now())
-    total_amount = db.Column(db.Numeric(10, 2), nullable=False)
     status = db.Column(db.String(50), default="Processing")
     payment_method = db.Column(db.String(50), nullable=False)
 
     # Relationship to get all items in this order
     items = db.relationship("OrderItem", backref="order", lazy="dynamic")
     user = db.relationship("User")
+    sub_total = db.Column(db.Numeric(10, 2), nullable=False)
+    grand_total = db.Column(db.Numeric(10, 2), nullable=False)
+    shipping_cost = db.Column(db.Numeric(10, 2), default=Decimal('0.00'))
 
 
 # --- 5. Order Items Table ---
@@ -77,3 +80,4 @@ class OrderItem(db.Model):
     price_at_purchase = db.Column(db.Numeric(10, 2), nullable=False)
 
     product = db.relationship("Product")
+    
