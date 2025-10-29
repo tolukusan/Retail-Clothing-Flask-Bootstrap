@@ -1,0 +1,184 @@
+/* --- General Authentication Layout --- */
+:root {
+  --premium-gradient: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+/* Wrapper to help centre the auth box on the page */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Use a relative unit for height */
+  padding: 20px;
+}
+
+.auth-container {
+  display: flex;
+  width: 90%;
+  max-width: 950px; /* Increased max-width */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 500px;
+  background-color: #ffffff;
+}
+
+/* --- Panel (The Coloured Side) --- */
+
+.panel {
+  flex: 1;
+  /* Gradient for a premium look */
+  background: var(--premium-gradient);
+  color: #ffffff;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: all 0.6s ease-in-out; /* Smooth transition for visual effects if added later */
+}
+
+.panel h2 {
+  font-weight: 700;
+  margin-bottom: 15px;
+  font-size: 2rem;
+}
+
+.panel p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+.panel button#auth-toggle-btn {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  padding: 10px 30px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, color 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.panel button#auth-toggle-btn:hover {
+  background-color: #ffffff;
+  color: #007bff;
+}
+
+/* --- Form Container (The White Side) --- */
+
+.form-container {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.form-container h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 35px;
+  font-weight: 600;
+  font-size: 2.2rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  width: 100%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+  transition: border-colour 0.3s, box-shadow 0.3s; /* British English spelling */
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  /* background-color: var(--premium-gradient); */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: background-color 0.3s, transform 0.1s;
+  text-transform: uppercase;
+}
+
+/* .btn-primary:hover {
+    background-color: var(--premium-gradient);
+} */
+
+.back-home {
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+.back-home:hover {
+  color: #007bff;
+}
+
+.navbar-gradient {
+  background: var(--premium-gradient) !important;
+  color: #ffffff !important;
+}
+
+/* Text and hover states */
+.navbar-gradient .nav-link,
+.navbar-gradient .navbar-brand {
+  color: #ffffff !important;
+  transition: color 0.3s ease;
+}
+
+.navbar-gradient .nav-link:hover,
+.navbar-gradient .navbar-brand:hover {
+  color: #e0e0e0 !important;
+}
+
+/* --- Responsive Layout for Mobile --- */
+
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .form-container {
+    padding: 30px;
+    order: 1; /* Form on top */
+  }
+
+  .panel {
+    padding: 30px;
+    order: 2; /* Panel on bottom */
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+}

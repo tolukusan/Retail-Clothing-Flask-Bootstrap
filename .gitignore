@@ -1,0 +1,41 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.log
+
+# --- Virtual Environment ---
+venv/
+env/
+.venv/
+
+# --- Flask & Instance Config ---
+instance/
+*.db
+*.sqlite3
+*.sqlite
+.env
+*.pem
+
+# --- VS Code / IDEs ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- OS-generated files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Test & Build Artifacts ---
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+ram.md
+app/static/bootstrap

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Shop All Products{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">All Products</h1>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <img src="{{ product.image_url or url_for('static', filename='images/default_product.jpg') }}"
+                class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-muted">{{ product.category|capitalize }}</p>
+                <p class="card-text">{{ product.desc[:50] }}...</p>
+                <p class="fs-4 fw-bold mt-auto mb-2">£{{ product.price|round(2) }}</p>
+
+                {% if product.stock_level > 0 %}
+                <a href="{{ url_for('main.product_detail', prod_id=product.prod_id) }}"
+                    class="btn btn-outline-secondary btn-sm">View Details</a>
+                <form method="POST" action="{{ url_for('cart.add_to_cart', product_id=product.prod_id) }}">
+                    <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                </form>
+                {% else %}
+                <a href="{{ url_for('main.product_detail', prod_id=product.prod_id) }}"
+                    class="btn btn-outline-secondary btn-sm">View Details</a>
+                <button class="btn btn-primary w-100" disabled>Out of Stock</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <p class="alert alert-info text-center">There are no products listed yet.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
