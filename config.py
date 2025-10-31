@@ -10,7 +10,11 @@ class Config:
     load_dotenv()
 
     SECRET_KEY = os.environ.get("SECRET_KEY")
+    if os.environ.get("SECRET_KEY") is None:
+        SECRET_KEY = "secretkey"
+
     # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+
 
     # if os.environ.get("DATABASE_URL") is None:
         # SQLALCHEMY_DATABASE_URI = "sqlite:///instance/app3.db"
