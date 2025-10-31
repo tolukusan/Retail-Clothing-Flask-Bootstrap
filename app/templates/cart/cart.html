@@ -112,8 +112,22 @@
                 </ul>
                 
                 <hr>
-                
+
                 <form method="POST" action="{{ url_for('cart.checkout') }}">
+                    <!-- Payment Method Selection -->
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label fw-bold">Payment Method</label>
+                        <select class="form-select" id="payment_method" name="payment_method" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="Wallet">Wallet (£{{ current_user.wallet_balance|round(2) }})</option>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="Debit Card">Debit Card</option>
+                            <option value="PayPal">PayPal</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                        </select>
+                        <div class="form-text">For demo purposes only - no real payments processed</div>
+                    </div>
+                    
                     <button type="submit" class="btn btn-success btn-lg w-100 shadow mt-3">
                         Proceed to Checkout
                     </button>

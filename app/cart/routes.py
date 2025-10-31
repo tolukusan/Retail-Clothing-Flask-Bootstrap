@@ -92,7 +92,7 @@ def remove_from_cart(cart_item_id):
     flash(f'{product_name} was removed from your basket.', 'info')
     return redirect(url_for('cart.view_cart'))
 
-
+# this isn't being used yet
 @cart_bp.route('/cart/update/<int:cart_item_id>', methods=['POST'])
 @login_required
 def update_cart_item_quantity(cart_item_id):
@@ -145,6 +145,11 @@ def checkout():
         flash('Your basket is empty and cannot be checked out.', 'warning')
         return redirect(url_for('cart.view_cart'))
 
+    payment_method = request.form.get('payment_method')
+    if not payment_method:
+        flash('Please select a payment method.', 'danger')
+        return redirect(url_for('cart.view_cart'))
+    
     # Prepare for recalculation and transaction setup
     subtotal = Decimal('0.00')
     order_items_to_create = []
@@ -173,14 +178,15 @@ def checkout():
     grand_total = subtotal + shipping
     
     # Wallet Balance Check
-    if current_user.wallet_balance < grand_total:
+    if payment_method == "Wallet" and current_user.wallet_balance < grand_total:
         flash(f'Insufficient funds. Your wallet balance is £{current_user.wallet_balance:.2f}, but the total is £{grand_total:.2f}. Please top up your wallet.', 'danger')
         return redirect(url_for('cart.view_cart'))
     
     # 3. Transaction Processing (Atomic)
     try:
         # a. Deduct from user wallet
-        current_user.wallet_balance -= grand_total
+        if payment_method == "Wallet":
+            current_user.wallet_balance -= grand_total
         
         # b. Create new Order - UPDATED to match your Order model
         new_order = Order(
@@ -188,7 +194,7 @@ def checkout():
             sub_total=subtotal,  # Changed from total_amount
             grand_total=grand_total,  # Changed from total_amount
             shipping_cost=shipping,
-            payment_method="Wallet"  # Added required field
+            payment_method=payment_method  # Added required field
             # order_date and status have defaults
         )
         db.session.add(new_order)
