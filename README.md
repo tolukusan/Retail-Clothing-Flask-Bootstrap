@@ -44,9 +44,12 @@ A responsive web application for a retail clothing business, built with **Flask*
     pip install -r requirements.txt
     ```
 
-4. **Apply database migrations**
+4. **Initialise database**
 
     ```bash
+    set FLASK_APP=run.py
+    flask db init
+    flask db migrate
     flask db upgrade
     ```
 
@@ -66,10 +69,3 @@ Visit `http://127.0.0.1:5000` in your browser.
 ## Licence
 
 MIT Licence
-
-```
-
-This is a clean, ready-to-use `README.md`. Replace the file content with the above (remove the outer code block if copying directly).
-
-Want me to add screenshots, badges, or a contributing section?
-```
