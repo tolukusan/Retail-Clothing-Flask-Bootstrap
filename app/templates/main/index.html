@@ -2,36 +2,49 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %}
-<header class="p-5 mb-4 bg-light rounded-3 text-center">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Welcome to Our E-Commerce Store!</h1>
-        <p class="col-md-8 fs-4 mx-auto">Discover our exclusive collection of watches and bags.</p>
-        <a class="btn btn-primary n-lg" href="{{ url_for('main.product_list') }}" role="button">Start Shopping</a>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+<header class="hero-header">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="hero-title">Welcome To The O&T Store!</h1>
+        <p class="hero-subtitle">Discover our exclusive collection of wristwatches and handbags.</p>
+        <a class="hero-btn" href="{{ url_for('main.product_list') }}" role="button">
+            <span>Start Shopping</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
     </div>
+    <div class="hero-decoration"></div>
 </header>
 
-<h2 class="mt-5 mb-4 text-center">Featured Products</h2>
-
-<div class="row row-cols-1 row-cols-md-4 g-4">
-    {% for product in products %}
-    <div class="col">
-        <div class="card h-100 shadow-sm">
-            <img src="{{ product.image_url or url_for('static', filename='images/default_product.jpg') }}"
-                class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text text-muted">{{ product.category|capitalize }}</p>
-                <p class="fs-4 fw-bold mt-auto mb-2">£{{ product.price|round(2) }}</p>
-
-                <a href="{{ url_for('main.product_detail', prod_id=product.prod_id) }}"
-                    class="btn btn-outline-secondary btn-sm">View Details</a>
+<main class="container">
+    <h2 class="section-title">Featured Products</h2>
+    
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-image-wrapper">
+                <img src="{{ product.image_url or url_for('static', filename='images/default_product.jpg') }}"
+                     class="product-image" alt="{{ product.name }}">
+                <div class="product-badge">Featured</div>
+            </div>
+            <div class="product-body">
+                <h5 class="product-title">{{ product.name }}</h5>
+                <p class="product-category">{{ product.category|capitalize }}</p>
+                <p class="product-price">£{{ product.price|round(2) }}</p>
+                <a href="{{ url_for('main.product_detail', prod_id=product.prod_id) }}" class="product-btn">
+                    <span>View Details</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
         </div>
+        {% else %}
+        <p class="col-12 text-center">No products are currently available.</p>
+        {% endfor %}
     </div>
-    {% else %}
-    <p class="col-12 text-center">No products are currently available.</p>
-    {% endfor %}
-</div>
-
+</main>
 {% endblock %}

@@ -2,38 +2,77 @@
 {% block title %}Shop All Products{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">All Products</h1>
+<div class="products-header">
+    <h1 class="products-title">Discover Our Collection</h1>
+    <p class="products-subtitle">Premium wristwatches and handbags curated just for you</p>
+</div>
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+<div class="products-grid">
     {% for product in products %}
-    <div class="col">
-        <div class="card h-100 shadow-sm">
+    <div class="modern-product-card">
+        <div class="product-image-wrapper">
             <img src="{{ product.image_url or url_for('static', filename='images/default_product.jpg') }}"
-                class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text text-muted">{{ product.category|capitalize }}</p>
-                <p class="card-text">{{ product.desc[:50] }}...</p>
-                <p class="fs-4 fw-bold mt-auto mb-2">£{{ product.price|round(2) }}</p>
-
-                {% if product.stock_level > 0 %}
-                <a href="{{ url_for('main.product_detail', prod_id=product.prod_id) }}"
-                    class="btn btn-outline-secondary btn-sm">View Details</a>
-                <form method="POST" action="{{ url_for('cart.add_to_cart', product_id=product.prod_id) }}">
-                    <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
-                </form>
-                {% else %}
-                <a href="{{ url_for('main.product_detail', prod_id=product.prod_id) }}"
-                    class="btn btn-outline-secondary btn-sm">View Details</a>
-                <button class="btn btn-primary w-100" disabled>Out of Stock</button>
-                {% endif %}
+                class="product-image" alt="{{ product.name }}">
+            
+            <!-- Stock Badge -->
+            {% if product.stock_level > 5 %}
+            <div class="stock-badge in-stock">
+                <i class="bi bi-check-circle-fill"></i> In Stock
+            </div>
+            {% elif product.stock_level > 0 %}
+            <div class="stock-badge low-stock">
+                <i class="bi bi-exclamation-circle-fill"></i> Low Stock
+            </div>
+            {% else %}
+            <div class="stock-badge out-stock">
+                <i class="bi bi-x-circle-fill"></i> Out of Stock
+            </div>
+            {% endif %}
+            
+            <!-- Quick View Overlay -->
+            <div class="quick-view-overlay">
+                <a href="{{ url_for('main.product_detail', prod_id=product.prod_id) }}" class="quick-view-btn">
+                    <i class="bi bi-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+        
+        <div class="product-card-body">
+            <div class="product-category">
+                <i class="bi bi-tag-fill"></i> {{ product.category|capitalize }}
+            </div>
+            <h5 class="product-card-title">{{ product.name }}</h5>
+            <p class="product-description">{{ product.desc[:60] }}...</p>
+            
+            <div class="product-footer">
+                <div class="product-price-section">
+                    <span class="product-price">£{{ product.price|round(2) }}</span>
+                    <span class="product-price-label">per item</span>
+                </div>
+                
+                <div class="product-actions">
+                    {% if product.stock_level > 0 %}
+                    <form method="POST" action="{{ url_for('cart.add_to_cart', product_id=product.prod_id) }}" class="add-cart-form">
+                        <button type="submit" class="add-to-cart-btn" title="Add to Cart">
+                            <i class="bi bi-cart-plus"></i>
+                        </button>
+                    </form>
+                    {% else %}
+                    <button class="add-to-cart-btn disabled" disabled title="Out of Stock">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
     {% else %}
-    <div class="col-12">
-        <p class="alert alert-info text-center">There are no products listed yet.</p>
+    <div class="empty-products">
+        <div class="empty-icon">
+            <i class="bi bi-inbox"></i>
+        </div>
+        <h3>No Products Available</h3>
+        <p>Check back soon for our amazing collection!</p>
     </div>
     {% endfor %}
 </div>

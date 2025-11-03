@@ -1,0 +1,744 @@
+/* Wallet Container */
+.wallet-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0 60px;
+}
+
+/* Wallet Header */
+.wallet-header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.wallet-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.wallet-icon-wrapper i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.wallet-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.wallet-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+}
+
+/* Balance Card */
+.balance-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 30px;
+    padding: 50px 40px;
+    margin-bottom: 50px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+}
+
+.balance-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.balance-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.balance-circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    right: -100px;
+    animation: float 8s ease-in-out infinite;
+}
+
+.balance-circle-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -100px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
+}
+
+.balance-circle-3 {
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    left: 20%;
+    animation: float 12s ease-in-out infinite;
+}
+
+.balance-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.balance-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.balance-label i {
+    font-size: 1.5rem;
+}
+
+.balance-amount {
+    margin-bottom: 30px;
+}
+
+.currency-symbol {
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-right: 5px;
+}
+
+.amount-value {
+    font-size: 5rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+}
+
+.balance-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.balance-info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.balance-info-item i {
+    font-size: 1.25rem;
+}
+
+.top-up-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    color: var(--primary);
+    padding: 18px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+}
+
+.top-up-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    background: var(--accent);
+    color: white;
+}
+
+.top-up-btn i:last-child {
+    transition: transform 0.3s ease;
+}
+
+.top-up-btn:hover i:last-child {
+    transform: translateX(5px);
+}
+
+/* Section Title */
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 2px;
+}
+
+/* Actions Grid */
+.quick-actions-section {
+    margin-bottom: 60px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.action-card {
+    background: white;
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.action-decoration {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 8rem;
+    opacity: 0.05;
+    transition: all 0.4s ease;
+}
+
+.action-card:hover .action-decoration {
+    transform: rotate(15deg) scale(1.1);
+    opacity: 0.08;
+}
+
+.action-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.order-card .action-icon {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+.shop-card .action-icon {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: white;
+}
+
+.cart-card .action-icon {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.action-card:hover .action-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.action-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.action-description {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    gap: 12px;
+}
+
+.action-btn i {
+    transition: transform 0.3s ease;
+}
+
+.action-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* Benefits Section */
+.benefits-section {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-radius: 30px;
+    padding: 50px 40px;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.benefit-item {
+    text-align: center;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+}
+
+.benefit-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.benefit-description {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Top-Up Container */
+.topup-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 0 60px;
+}
+
+/* Top-Up Card */
+.topup-card {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.topup-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 50px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.topup-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.topup-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+}
+
+.topup-icon i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.topup-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.topup-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    z-index: 1;
+}
+
+/* Current Balance Display */
+.current-balance-display {
+    padding: 30px 40px;
+    background: var(--background);
+}
+
+.balance-badge {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.balance-badge i {
+    font-size: 2.5rem;
+    color: var(--accent);
+}
+
+.balance-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.balance-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.balance-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--primary);
+}
+
+/* Top-Up Form */
+.topup-form-section {
+    padding: 40px;
+}
+
+.form-group-modern {
+    margin-bottom: 30px;
+}
+
+.form-label-modern {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 15px;
+}
+
+.form-label-modern i {
+    color: var(--primary);
+    font-size: 1.3rem;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-prefix {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    z-index: 2;
+}
+
+.form-control-modern {
+    width: 100%;
+    padding: 20px 20px 20px 50px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border: 3px solid var(--border);
+    border-radius: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-control-modern:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #dc2626;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* Quick Amounts */
+.quick-amounts {
+    margin-bottom: 30px;
+}
+
+.quick-amounts-label {
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.quick-amount-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.quick-amount-btn {
+    padding: 12px 24px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quick-amount-btn:hover, .quick-amount-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Security Notice */
+.security-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(34, 197, 94, 0.1);
+    border: 2px solid rgba(34, 197, 94, 0.2);
+    border-radius: 12px;
+    color: #166534;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.security-notice i {
+    font-size: 1.5rem;
+    color: #22c55e;
+}
+
+/* Submit Button */
+.submit-topup-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 40px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+}
+
+.submit-topup-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(34, 197, 94, 0.6);
+    background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.submit-topup-btn i:last-child {
+    transition: transform 0.3s ease;
+}
+
+.submit-topup-btn:hover i:last-child {
+    transform: translateX(5px);
+}
+
+/* Top-Up Footer */
+.topup-footer {
+    padding: 25px 40px;
+    background: var(--background);
+    text-align: center;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--primary);
+    gap: 12px;
+}
+
+/* Info Cards */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.info-card i {
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+.info-card div {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-card strong {
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.info-card span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .wallet-title {
+        font-size: 2rem;
+    }
+    
+    .amount-value {
+        font-size: 3.5rem;
+    }
+    
+    .balance-card {
+        padding: 40px 30px;
+    }
+    
+    .balance-info {
+        gap: 20px;
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .topup-form-section {
+        padding: 30px 25px;
+    }
+    
+    .current-balance-display {
+        padding: 25px 25px;
+    }
+    
+    .info-cards {
+        grid-template-columns: 1fr;
+    }
+}
