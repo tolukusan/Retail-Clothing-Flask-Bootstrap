@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - {% block title %}{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: #2c3e50;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1;
+            padding: 15px 20px;
+            border-bottom: 1px solid #34495e;
+        }
+        .sidebar .nav-link:hover {
+            background: #34495e;
+            color: #3498db;
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+            color: white;
+        }
+        .navbar-brand {
+            color: #ecf0f1 !important;
+            font-weight: bold;
+        }
+        
+        /* Ensure sidebar is hidden on mobile when collapsed */
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 1000;
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .sidebar-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+                display: none;
+            }
+            .sidebar-backdrop.show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Backdrop for Mobile -->
+            <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+            
+            <!-- Sidebar - ADD THE ID HERE -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <h5 class="text-center text-white mb-4">
+                        <i class="bi bi-speedometer2"></i> Admin Panel
+                    </h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'admin.admin_dashboard' %}active{% endif %}" 
+                               href="{{ url_for('admin.admin_dashboard') }}">
+                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'admin.manage_products' %}active{% endif %}" 
+                               href="{{ url_for('admin.manage_products') }}">
+                                <i class="bi bi-bag me-2"></i>Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'admin.manage_users' %}active{% endif %}" 
+                               href="{{ url_for('admin.manage_users') }}">
+                                <i class="bi bi-people me-2"></i>Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'admin.manage_orders' %}active{% endif %}" 
+                               href="{{ url_for('admin.manage_orders') }}">
+                                <i class="bi bi-receipt me-2"></i>Orders
+                            </a>
+                        </li>
+                        <li class="nav-item mt-4">
+                            <a class="nav-link text-warning" href="{{ url_for('main.index') }}">
+                                <i class="bi bi-house me-2"></i>Back to Store
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Top navbar for mobile -->
+                <nav class="navbar navbar-dark bg-dark d-md-none">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" 
+                                aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle sidebar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <span class="navbar-brand">Admin Panel</span>
+                    </div>
+                </nav>
+
+                <!-- Page content -->
+                <div class="container-fluid py-4">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom script for mobile sidebar -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebarMenu');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        
+        // Close sidebar when clicking on backdrop
+        backdrop.addEventListener('click', function() {
+            sidebar.classList.remove('show');
+            backdrop.classList.remove('show');
+        });
+        
+        // Handle sidebar show/hide events
+        sidebar.addEventListener('show.bs.collapse', function() {
+            backdrop.classList.add('show');
+        });
+        
+        sidebar.addEventListener('hide.bs.collapse', function() {
+            backdrop.classList.remove('show');
+        });
+    });
+    </script>
+</body>
+</html>

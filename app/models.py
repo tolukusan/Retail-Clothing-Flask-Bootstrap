@@ -14,6 +14,11 @@ class User(UserMixin, db.Model):
     # Wallet balance initialised to 0.00
     wallet_balance = db.Column(db.Numeric(10, 2), default=0.00)
 
+
+    is_admin = db.Column(db.Boolean, default=False)  
+    is_active = db.Column(db.Boolean, default=True)  
+    date_joined = db.Column(db.DateTime, default=db.func.now())  
+
     # Note: Flask-Login expects a method named 'get_id()', but UserMixin provides it.
     # To keep your existing column name, you need to override the default:
     def get_id(self):

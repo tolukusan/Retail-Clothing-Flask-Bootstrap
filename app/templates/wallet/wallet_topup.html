@@ -2,40 +2,151 @@
 {% block title %}Top Up Wallet{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-6 col-md-8">
-        <div class="card shadow-lg border-0 rounded-lg mt-5">
-            <div class="card-header bg-primary text-white text-center">
-                <h3 class="fw-light my-3">Wallet Top-Up</h3>
-            </div>
-            <div class="card-body">
-                <!-- Display the current balance -->
-                <div class="alert alert-info text-center fs-4">
-                    Current Balance: <span class="fw-bold text-dark">£{{ current_user.wallet_balance|round(2) }}</span>
+<div class="topup-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav">
+        <a href="{{ url_for('main.index') }}" class="breadcrumb-link">
+            <i class="bi bi-house-door"></i> Home
+        </a>
+        <i class="bi bi-chevron-right breadcrumb-separator"></i>
+        <a href="{{ url_for('wallet.wallet_home') }}" class="breadcrumb-link">Wallet</a>
+        <i class="bi bi-chevron-right breadcrumb-separator"></i>
+        <span class="breadcrumb-current">Top Up</span>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <!-- Top Up Card -->
+            <div class="topup-card">
+                <!-- Header -->
+                <div class="topup-header">
+                    <div class="topup-icon">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <h1 class="topup-title">Add Funds to Your Wallet</h1>
+                    <p class="topup-subtitle">Quick and secure wallet top-up</p>
                 </div>
-                
-                <!-- The form posts back to the wallet.top_up_wallet route -->
-                <form method="POST" action="{{ url_for('wallet.top_up_wallet') }}">
-                    {{ form.hidden_tag() }}
-                    
-                    <div class="form-floating mb-3">
-                        <!-- WalletTopUpForm has a DecimalField named 'amount' -->
-                        {{ form.amount(class="form-control", placeholder="e.g., 50.00") }}
-                        {{ form.amount.label(for="amount") }}
-                        {% for error in form.amount.errors %}
-                            <small class="text-danger">{{ error }}</small>
-                        {% endfor %}
+
+                <!-- Current Balance Display -->
+                <div class="current-balance-display">
+                    <div class="balance-badge">
+                        <i class="bi bi-cash-stack"></i>
+                        <div class="balance-text">
+                            <span class="balance-label">Current Balance</span>
+                            <span class="balance-value">£{{ current_user.wallet_balance|round(2) }}</span>
+                        </div>
                     </div>
-                    
-                    <div class="d-grid gap-2">
-                        {{ form.submit(class="btn btn-success btn-lg mt-3") }}
-                    </div>
-                </form>
+                </div>
+
+                <!-- Top Up Form -->
+                <div class="topup-form-section">
+                    <form method="POST" action="{{ url_for('wallet.top_up_wallet') }}" class="topup-form">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Amount Input -->
+                        <div class="form-group-modern">
+                            <label for="amount" class="form-label-modern">
+                                <i class="bi bi-currency-pound"></i>
+                                Top-Up Amount
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">£</span>
+                                {{ form.amount(class="form-control-modern", 
+                                   placeholder="Enter amount (e.g., 50.00)", 
+                                   id="amount",
+                                   min="0.01",
+                                   step="0.01") }}
+                            </div>
+                            {% for error in form.amount.errors %}
+                            <div class="error-message">
+                                <i class="bi bi-exclamation-circle"></i>
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Quick Amount Buttons -->
+                        <div class="quick-amounts">
+                            <p class="quick-amounts-label">Quick Select:</p>
+                            <div class="quick-amount-buttons">
+                                <button type="button" class="quick-amount-btn" onclick="setAmount(10)">
+                                    £10
+                                </button>
+                                <button type="button" class="quick-amount-btn" onclick="setAmount(25)">
+                                    £25
+                                </button>
+                                <button type="button" class="quick-amount-btn" onclick="setAmount(50)">
+                                    £50
+                                </button>
+                                <button type="button" class="quick-amount-btn" onclick="setAmount(100)">
+                                    £100
+                                </button>
+                                <button type="button" class="quick-amount-btn" onclick="setAmount(200)">
+                                    £200
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Security Notice -->
+                        <div class="security-notice">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Your transaction is secured with 256-bit encryption</span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="submit-topup-btn">
+                            <i class="bi bi-plus-circle-fill"></i>
+                            <span>Add Funds Now</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="topup-footer">
+                    <a href="{{ url_for('wallet.wallet_home') }}" class="back-link">
+                        <i class="bi bi-arrow-left"></i>
+                        Return to Wallet
+                    </a>
+                </div>
             </div>
-            <div class="card-footer text-center py-3">
-                <a href="{{ url_for('wallet.wallet_home') }}" class="text-muted">Return to Wallet Homepage</a>
+
+            <!-- Info Cards -->
+            <div class="info-cards">
+                <div class="info-card">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    <div>
+                        <strong>Instant Credit</strong>
+                        <span>Funds appear immediately</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <i class="bi bi-lock-fill"></i>
+                    <div>
+                        <strong>Secure Payment</strong>
+                        <span>Bank-level security</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <i class="bi bi-clock-fill"></i>
+                    <div>
+                        <strong>24/7 Available</strong>
+                        <span>Top up anytime</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+function setAmount(value) {
+    document.getElementById('amount').value = value.toFixed(2);
+    
+    // Add visual feedback
+    const buttons = document.querySelectorAll('.quick-amount-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+}
+</script>
 {% endblock %}

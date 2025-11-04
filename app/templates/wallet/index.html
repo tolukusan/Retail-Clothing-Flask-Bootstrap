@@ -2,52 +2,152 @@
 {% block title %}My Wallet{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10">
-        <h1 class="mb-4 text-center">Your E-Commerce Wallet</h1>
-
-        <!-- Current Balance Card -->
-        <div class="card shadow-lg mb-5 border-primary border-3">
-            <div class="card-body p-4 p-md-5 text-center">
-                <p class="text-muted text-uppercase mb-2 fs-5">Current Balance</p>
-                <h2 class="display-3 fw-bolder text-primary mb-4">
-                    £{{ current_user.wallet_balance|round(2) }}
-                </h2>
-                
-                <p class="lead">Manage your funds to ensure smooth and fast checkout every time.</p>
-                
-                <a href="{{ url_for('wallet.top_up_wallet') }}" class="btn btn-success btn-lg shadow-sm mt-3">
-                    <i class="bi bi-wallet2 me-2"></i> Top Up Your Wallet Now
-                </a>
-            </div>
+<div class="wallet-container">
+    <!-- Page Header -->
+    <div class="wallet-header">
+        <div class="wallet-icon-wrapper">
+            <i class="bi bi-wallet2"></i>
         </div>
+        <h1 class="wallet-title">Your Digital Wallet</h1>
+        <p class="wallet-subtitle">Manage your funds for seamless shopping experience</p>
+    </div>
 
-        <!-- Wallet Actions Section -->
-        <div class="row text-center">
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm border-info">
-                    <div class="card-body">
-                        <h5 class="card-title text-info">View Order History</h5>
-                        <p class="card-text text-muted">Review all your past purchases and transaction details.</p>
-                        <a href="{{ url_for('cart.user_orders') }}" class="btn btn-outline-info">
-                            Go to Orders
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm border-secondary">
-                    <div class="card-body">
-                        <h5 class="card-title text-secondary">Continue Shopping</h5>
-                        <p class="card-text text-muted">Explore our full catalogue of products.</p>
-                        <a href="{{ url_for('main.product_list') }}" class="btn btn-outline-secondary">
-                            Browse Shop
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <!-- Balance Card -->
+    <div class="balance-card">
+        <div class="balance-background">
+            <div class="balance-circle balance-circle-1"></div>
+            <div class="balance-circle balance-circle-2"></div>
+            <div class="balance-circle balance-circle-3"></div>
         </div>
         
+        <div class="balance-content">
+            <div class="balance-label">
+                <i class="bi bi-cash-stack"></i>
+                <span>Available Balance</span>
+            </div>
+            
+            <div class="balance-amount">
+                <span class="currency-symbol">£</span>
+                <span class="amount-value">{{ current_user.wallet_balance|round(2) }}</span>
+            </div>
+            
+            <div class="balance-info">
+                <div class="balance-info-item">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Secure & Protected</span>
+                </div>
+                <div class="balance-info-item">
+                    <i class="bi bi-lightning-charge"></i>
+                    <span>Instant Checkout</span>
+                </div>
+            </div>
+            
+            <a href="{{ url_for('wallet.top_up_wallet') }}" class="top-up-btn">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Top Up Wallet</span>
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Actions Grid -->
+    <div class="quick-actions-section">
+        <h2 class="section-title">Quick Actions</h2>
+        
+        <div class="actions-grid">
+            <!-- Order History Card -->
+            <div class="action-card order-card">
+                <div class="action-icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Order History</h3>
+                    <p class="action-description">Review all your past purchases and track your orders</p>
+                    <a href="{{ url_for('cart.user_orders') }}" class="action-btn">
+                        <span>View Orders</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="action-decoration">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+            </div>
+
+            <!-- Shopping Card -->
+            <div class="action-card shop-card">
+                <div class="action-icon">
+                    <i class="bi bi-shop"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Continue Shopping</h3>
+                    <p class="action-description">Explore our premium collection of watches and bags</p>
+                    <a href="{{ url_for('main.product_list') }}" class="action-btn">
+                        <span>Browse Store</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="action-decoration">
+                    <i class="bi bi-bag-heart"></i>
+                </div>
+            </div>
+
+            <!-- Cart Card -->
+            <div class="action-card cart-card">
+                <div class="action-icon">
+                    <i class="bi bi-cart3"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">My Cart</h3>
+                    <p class="action-description">Check items in your cart and complete your purchase</p>
+                    <a href="{{ url_for('cart.view_cart') }}" class="action-btn">
+                        <span>View Cart</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="action-decoration">
+                    <i class="bi bi-basket3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Benefits -->
+    <div class="benefits-section">
+        <h2 class="section-title">Why Use Your Wallet?</h2>
+        
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <h4 class="benefit-title">Lightning Fast</h4>
+                <p class="benefit-description">Skip payment forms and checkout in seconds</p>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="bi bi-shield-fill-check"></i>
+                </div>
+                <h4 class="benefit-title">100% Secure</h4>
+                <p class="benefit-description">Your funds are protected with bank-level security</p>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <h4 class="benefit-title">Track Spending</h4>
+                <p class="benefit-description">Monitor your transactions and manage your budget</p>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="bi bi-gift-fill"></i>
+                </div>
+                <h4 class="benefit-title">Exclusive Offers</h4>
+                <p class="benefit-description">Get special deals when you pay with your wallet</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

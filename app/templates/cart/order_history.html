@@ -2,95 +2,140 @@
 {% block title %}Your Order History{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Your Past Orders</h1>
+<div class="order-history-container">
+    <!-- Page Header -->
+    <div class="order-history-header">
+        <div class="order-history-icon">
+            <i class="bi bi-clock-history"></i>
+        </div>
+        <h1 class="order-history-title">Your Order History</h1>
+        <p class="order-history-subtitle">Track and review all your past purchases</p>
+    </div>
 
-{% if orders %}
-    <div class="accordion" id="orderHistoryAccordion">
-        <!-- prettier-ignore -->
+    {% if orders %}
+    <div class="orders-list">
         {% for order in orders %}
-        <div class="accordion-item shadow-sm mb-3">
-            <h2 class="accordion-header" id="heading{{ order.order_id }}">
-                <button class="accordion-button {% if not loop.first %}collapsed{% endif %} text-dark" 
-                        type="button" 
-                        data-bs-toggle="collapse" 
-                        data-bs-target="#collapse{{ order.order_id }}" 
-                        aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" 
-                        aria-controls="collapse{{ order.order_id }}">
-                    
-                    <div class="row w-100 align-items-center">
-                        <div class="col-md-3">
-                            <span class="fw-bold text-primary">Order #{{ order.order_id }}</span>
+        <div class="order-card">
+            <!-- Order Header -->
+            <div class="order-card-header" data-bs-toggle="collapse" 
+                 data-bs-target="#order{{ order.order_id }}" 
+                 aria-expanded="{% if loop.first %}true{% else %}false{% endif %}">
+                <div class="order-header-main">
+                    <div class="order-number">
+                        <i class="bi bi-receipt"></i>
+                        <span>Order #{{ order.order_id }}</span>
+                    </div>
+                    <div class="order-date">
+                        <i class="bi bi-calendar3"></i>
+                        <span>{{ order.order_date.strftime('%d %b %Y, %H:%M') }}</span>
+                    </div>
+                    <div class="order-total">
+                        <span class="total-label">Total:</span>
+                        <span class="total-amount">£{{ order.grand_total|round(2) }}</span>
+                    </div>
+                </div>
+                <div class="order-expand-icon">
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+            </div>
+
+            <!-- Order Details (Collapsible) -->
+            <div id="order{{ order.order_id }}" 
+                 class="order-details-collapse collapse {% if loop.first %}show{% endif %}">
+                <div class="order-card-body">
+                    <div class="order-items-header">
+                        <h4><i class="bi bi-box-seam"></i> Items in this Order</h4>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="order-items-list">
+                        {% for item in order.items %}
+                        <div class="order-item">
+                            <div class="order-item-info">
+                                <a href="{{ url_for('main.product_detail', prod_id=item.prod_id) }}" 
+                                   class="order-item-name">
+                                    {{ item.product.name if item.product else 'Product ID: ' ~ item.prod_id }}
+                                </a>
+                            </div>
+                            <div class="order-item-details">
+                                <div class="order-item-qty">
+                                    <span class="detail-label">Qty:</span>
+                                    <span class="detail-value">{{ item.qty }}</span>
+                                </div>
+                                <div class="order-item-price">
+                                    <span class="detail-label">Price:</span>
+                                    <span class="detail-value">£{{ item.price_at_purchase|round(2) }}</span>
+                                </div>
+                                <div class="order-item-total">
+                                    <span class="detail-label">Total:</span>
+                                    <span class="detail-value total">£{{ (item.price_at_purchase * item.qty)|round(2) }}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-5 text-start text-md-center">
-                            Order Date: {{ order.order_date.strftime('%d %b %Y, %H:%M') }}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="order-summary-section">
+                        <div class="order-summary-row">
+                            <span class="summary-label">Subtotal:</span>
+                            <span class="summary-value">£{{ (order.grand_total - order.shipping_cost)|round(2) }}</span>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <span class="fs-5 fw-bold text-success">Total: £{{ order.grand_total|round(2) }}</span>
+                        <div class="order-summary-row">
+                            <span class="summary-label">Shipping Cost:</span>
+                            <span class="summary-value">
+                                {% if order.shipping_cost > 0 %}
+                                    £{{ order.shipping_cost|round(2) }}
+                                {% else %}
+                                    <span class="free-badge">Free</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="order-summary-divider"></div>
+                        <div class="order-summary-row total-row">
+                            <span class="summary-label">Grand Total:</span>
+                            <span class="summary-value grand">£{{ order.grand_total|round(2) }}</span>
                         </div>
                     </div>
-                </button>
-            </h2>
 
-            <!-- Order Detail Collapse -->
-            <div id="collapse{{ order.order_id }}" 
-                 class="accordion-collapse collapse {% if loop.first %}show{% endif %}" 
-                 aria-labelledby="heading{{ order.order_id }}" 
-                 data-bs-parent="#orderHistoryAccordion">
-                <div class="accordion-body p-4 bg-light">
-                    
-                    <h5 class="mb-3">Items in this Order:</h5>
-                    
-                    <!-- Items Table -->
-                    <table class="table table-sm table-borderless">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th scope="col">Product Name</th>
-                                <th scope="col" class="text-end">Qty</th>
-                                <th scope="col" class="text-end">Price Paid</th>
-                                <th scope="col" class="text-end">Line Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in order.items %}
-                            <tr>
-                                <td>
-                                    <a href="{{ url_for('main.product_detail', prod_id=item.prod_id) }}" class="text-decoration-none">
-                                        {{ item.product.name if item.product else 'Product ID: ' ~ item.prod_id }}
-                                    </a>
-                                </td>
-                                <td class="text-end">{{ item.qty }}</td>
-                                <td class="text-end">£{{ item.price_at_purchase|round(2) }}</td>
-                                <td class="text-end fw-bold">£{{ (item.price_at_purchase * item.qty)|round(2) }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3" class="text-end fw-bold pt-3">Subtotal:</td>
-                                <td class="text-end fw-bold pt-3">£{{ (order.grand_total - order.shipping_cost)|round(2) }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" class="text-end fw-bold">Shipping Cost:</td>
-                                <td class="text-end fw-bold">£{{ order.shipping_cost|round(2) }}</td>
-                            </tr>
-                            <tr class="table-success">
-                                <td colspan="3" class="text-end fw-bolder fs-5">Grand Total:</td>
-                                <td class="text-end fw-bolder fs-5">£{{ order.grand_total|round(2) }}</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    
+                    <!-- Order Actions -->
+                    <div class="order-actions">
+                        <a href="{{ url_for('main.product_list') }}" class="order-action-btn primary">
+                            <i class="bi bi-arrow-repeat"></i>
+                            <span>Order Again</span>
+                        </a>
+                        <button class="order-action-btn secondary" onclick="window.print()">
+                            <i class="bi bi-printer"></i>
+                            <span>Print Receipt</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 
-{% else %}
-<div class="alert alert-info text-center py-5 border-2">
-    <h4 class="alert-heading">No Orders Found!</h4>
-    <p>It looks like you haven't placed any orders yet. Once you complete a purchase, it will show up here.</p>
-    <a href="{{ url_for('main.product_list') }}" class="btn btn-primary mt-2">Browse Products</a>
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-orders-state">
+        <div class="empty-orders-icon">
+            <i class="bi bi-inbox"></i>
+        </div>
+        <h2 class="empty-orders-title">No Orders Yet!</h2>
+        <p class="empty-orders-text">You haven't placed any orders yet. Start shopping to see your order history here!</p>
+        <a href="{{ url_for('main.product_list') }}" class="browse-products-btn">
+            <i class="bi bi-shop"></i>
+            <span>Browse Products</span>
+            <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    {% endif %}
 </div>
-{% endif %}
+
+<style>
+/* Rotate chevron when expanded */
+.order-card-header[aria-expanded="true"] .order-expand-icon i {
+    transform: rotate(180deg);
+}
+</style>
 {% endblock %}
