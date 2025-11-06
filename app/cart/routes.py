@@ -5,6 +5,7 @@ from . import cart_bp
 from app import db
 from app.models import Product, CartItem, Order, OrderItem # Import your new models!
 from decimal import Decimal
+from app.tasks import send_order_confirmation_email
 
 @cart_bp.route('/cart/add/<int:product_id>', methods=['POST'])
 @login_required # Ensure only logged-in users can add to cart
@@ -217,6 +218,12 @@ def checkout():
         CartItem.query.filter_by(user_id=current_user.user_id).delete()
 
         # 4. Commit Transaction
+        order_items = OrderItem.query.filter_by(order_id=new_order.order_id).all()
+        send_order_confirmation_email(
+            user=current_user,
+            order=new_order,
+            order_items=order_items
+        )
         db.session.commit()
         flash(f'Order #{new_order.order_id} successfully placed! The amount of £{grand_total:.2f} has been deducted from your wallet.', 'success')
         

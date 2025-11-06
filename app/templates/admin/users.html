@@ -2,6 +2,31 @@
 
 {% block title %}Manage Users{% endblock %}
 
+{% block style %}
+<style>
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-group .btn {
+    margin-right: 2px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Manage Users</h1>
@@ -144,7 +169,8 @@
                                         data-bs-toggle="modal" 
                                         data-bs-target="#deleteUserModal"
                                         data-user-id="{{ user.user_id }}"
-                                        data-user-name="{{ user.name }}">
+                                        data-user-name="{{ user.name }}"
+                                        >
                                     <i class="bi bi-trash"></i>
                                 </button>
                                 {% else %}
@@ -187,7 +213,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteUserForm" method="POST" style="display: inline;">
+                <form id="deleteUserForm" 
+                    action="#" 
+                    method="POST" 
+                    style="display: inline;"
+                    data-base-action="{{ url_for('admin.delete_user', user_id='0') }}">
                     <button type="submit" class="btn btn-danger">Delete User</button>
                 </form>
             </div>
@@ -196,7 +226,7 @@
 </div>
 {% endblock %}
 
-{% block scripts %}
+{% block script %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const deleteUserModal = document.getElementById('deleteUserModal');
@@ -210,33 +240,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const userNameElement = deleteUserModal.querySelector('#userNameToDelete');
         const deleteForm = deleteUserModal.querySelector('#deleteUserForm');
         
-        modalTitle.textContent = `Delete User: ${userName}`;
+        modalTitle.textContent = `Confirm User Deletion`; // Keep title static or use less specific text
         userNameElement.textContent = userName;
-        deleteForm.action = "{{ url_for('admin.delete_user', user_id=0) }}".replace('0', userId);
-    });
+
+        // --- The key change is here ---
+        const baseUrl = deleteForm.getAttribute('data-base-action');
+        deleteForm.action = baseUrl.replace('0', userId);
+        // -----------------------------
+        });
 });
 </script>
-
-<style>
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.btn-group .btn {
-    margin-right: 2px;
-}
-
-.btn-group .btn:last-child {
-    margin-right: 0;
-}
-</style>
 {% endblock %}
+

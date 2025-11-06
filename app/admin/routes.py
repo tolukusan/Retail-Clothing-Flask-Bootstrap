@@ -1,14 +1,18 @@
+# app\admin\routes.py
+
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
 from app.models import User, Product, Order, OrderItem, CartItem  # Add CartItem here
 from app.models import User, Product, Order, OrderItem
-from app.admin.forms import ProductForm
+from app.admin.forms import ProductForm, BatchUploadForm
 from app import db
 import os
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
-
-admin_bp = Blueprint('admin', __name__)
+from . import admin_bp
+import csv
+from io import StringIO
+from decimal import Decimal
 
 # Add this function to handle file uploads
 def save_product_image(file):
@@ -27,7 +31,7 @@ def save_product_image(file):
         file_path = os.path.join(upload_folder, unique_filename)
         file.save(file_path)
         
-        return f"/static/uploads/products/{unique_filename}"
+        return f"uploads/products/{unique_filename}"
     return None
 
 @admin_bp.route('/admin')
@@ -89,8 +93,10 @@ def manage_products():
         return redirect(url_for('main.index'))
     
     form = ProductForm()
-    
-    if form.validate_on_submit():
+    batch_form = BatchUploadForm()
+
+    # --- Single Product Add ---
+    if form.validate_on_submit() and request.form.get('submit') == 'single':
         # Handle image upload
         image_path = None
         if form.image.data:
@@ -113,8 +119,103 @@ def manage_products():
         flash('Product added successfully!', 'success')
         return redirect(url_for('admin.manage_products'))
     
+    # --- Batch CSV Upload ---
+    if batch_form.validate_on_submit() and request.form.get('submit') == 'batch':
+        file = batch_form.csv_file.data
+        stream = StringIO(file.stream.read().decode("UTF-8"), newline=None)
+        csv_reader = csv.DictReader(stream)
+
+        imported = 0
+        errors = []
+
+        for row_num, row in enumerate(csv_reader, start=2):  # start=2 → skip header
+            try:
+                # Required fields
+                name = row.get('name', '').strip()
+                category = row.get('category', '').strip().lower()
+                price_str = row.get('price', '').strip()
+                stock_str = row.get('stock_level', '').strip()
+                desc = row.get('description', '').strip()
+
+                if not all([name, category, price_str, stock_str]):
+                    errors.append(f"Row {row_num}: Missing required fields")
+                    continue
+
+                if category not in ['handbag', 'watch']:
+                    errors.append(f"Row {row_num}: Invalid category '{category}'")
+                    continue
+
+                try:
+                    price = Decimal(price_str)
+                    if price < 0.01:
+                        raise ValueError
+                except:
+                    errors.append(f"Row {row_num}: Invalid price '{price_str}'")
+                    continue
+
+                try:
+                    stock_level = int(stock_str)
+                    if stock_level < 0:
+                        raise ValueError
+                except:
+                    errors.append(f"Row {row_num}: Invalid stock '{stock_str}'")
+                    continue
+
+                # Optional image URL (from CSV)
+                image_url = row.get('image_url', '').strip()
+                if image_url:
+                    # Remove leading slash and 'static/' if present
+                    image_url = image_url.lstrip('/')
+                    if image_url.startswith('static/'):
+                        image_url = image_url[7:]  # strip 'static/'
+                    # Ensure it starts with 'uploads/products/'
+                    if not image_url.startswith('uploads/products/'):
+                        errors.append(f"Row {row_num}: image_url must be in uploads/products/")
+                        image_url = None
+                else:
+                    image_url = None
+                # Generate SKU
+                sku = f"{category}_{Product.query.count() + imported + 1}"
+
+                product = Product(
+                    name=name,
+                    category=category,
+                    price=price,
+                    stock_level=stock_level,
+                    desc=desc or None,
+                    image_url=image_url or None,
+                    sku=sku
+                )
+                db.session.add(product)
+                imported += 1
+
+            except Exception as e:
+                errors.append(f"Row {row_num}: {str(e)}")
+
+        # Commit all at once
+        if imported > 0:
+            try:
+                db.session.commit()
+                flash(f'Successfully imported {imported} products!', 'success')
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Error saving to database: {e}', 'danger')
+        else:
+            flash('No products imported.', 'warning')
+
+        if errors:
+            flash(f'Errors: {" | ".join(errors[:5])}' + (f" (+{len(errors)-5} more)" if len(errors)>5 else ""), 'danger')
+
+        return redirect(url_for('admin.manage_products'))
+    
     products = Product.query.all()
-    return render_template('admin/products.html', products=products, form=form)
+    products = Product.query.all()
+    return render_template(
+        'admin/products.html',
+        products=products,
+        form=form,
+        batch_form=batch_form
+    )
 
 @admin_bp.route('/admin/orders')
 @login_required

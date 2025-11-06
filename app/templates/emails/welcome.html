@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the App!</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        h1 { color: #007bff; }
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white !important;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello, {{ username }}!</h1>
+        <p>Thank you for registering with our application. We are excited to have you join our community.</p>
+        <p>Your account is almost ready. To finalize your registration, please click the confirmation button below:</p>
+        
+        <a href="#" class="button">Confirm My Account</a>
+        
+        <p style="margin-top: 25px;">If you can't click the button, please copy and paste this link into your browser:</p>
+        <p><small>#</small></p>
+        <p>Cheers,</p>
+        <p>The Application Team</p>
+    </div>
+</body>
+</html>

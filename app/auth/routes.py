@@ -9,6 +9,8 @@ from flask_login import (
     current_user,
     logout_user,
 )  
+from app.tasks import send_welcome_email
+
 
 # --- A. Registration Route ---
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -34,8 +36,10 @@ def register():
         )
 
         # Save to database
+        send_welcome_email(form.email.data, form.name.data) 
         db.session.add(new_user)
         db.session.commit()
+        
 
         flash("Your account has been created! You can now log in.", "success")
         return redirect(url_for("auth.login"))

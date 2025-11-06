@@ -1,3 +1,5 @@
+# app\admin\forms.py
+
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, DecimalField, IntegerField, SelectField, TextAreaField, SubmitField
@@ -16,3 +18,10 @@ class ProductForm(FlaskForm):
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
     ])
     submit = SubmitField('Add Product')
+
+class BatchUploadForm(FlaskForm):
+    csv_file = FileField('CSV File', validators=[
+        DataRequired(),
+        FileAllowed(['csv'], 'CSV files only!')
+    ])
+    submit = SubmitField('Upload & Import')

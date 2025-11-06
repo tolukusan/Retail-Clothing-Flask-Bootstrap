@@ -60,7 +60,7 @@
                         {% if product.image_url %}
                         <div class="mt-2">
                             <p>Current Image:</p>
-                            <img src="{{ product.image_url }}" alt="Current product image" style="max-width: 100px; max-height: 100px;" class="img-thumbnail">
+                            <img src="{{ url_for('static', filename=product.image_url) }}" alt="Current product image" style="max-width: 100px; max-height: 100px;" class="img-thumbnail">
                         </div>
                         {% endif %}
                     </div>
