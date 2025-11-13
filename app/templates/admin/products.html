@@ -1,94 +1,126 @@
+<!-- Extends the base admin layout -->
 {% extends "admin/base.html" %}
 
+<!-- Set the page title to "Manage Products" -->
 {% block title %}Manage Products{% endblock %}
 
 {% block content %}
+<!-- Header Section with page title and action buttons -->
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <!-- Main page heading -->
     <h1 class="h2">Manage Products</h1>
+
+    <!-- Action buttons container -->
     <div>
+        <!-- Button to open Add Single Product modal -->
         <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <!-- Icon for add button -->
             <i class="bi bi-plus-circle"></i> Add Single Product
         </button>
+        <!-- Button to open Batch Upload modal -->
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#batchUploadModal">
+            <!-- Icon for upload button -->
             <i class="bi bi-upload"></i> Batch Upload (CSV)
         </button>
     </div>
 </div>
 
-<!-- Flash Messages -->
+<!-- Flash messages section (shows notifications) -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
+            <!-- Each flash message container -->
             <div class="alert alert-{{ 'danger' if category in ['error', 'danger'] else 'success' }} alert-dismissible fade show">
+                <!-- Display message text -->
                 {{ message }}
+                <!-- Button to dismiss message -->
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         {% endfor %}
     {% endif %}
 {% endwith %}
 
-<!-- Products Table -->
+<!-- Card container for products table -->
 <div class="card">
+    <!-- Card header showing total number of products -->
     <div class="card-header">
         <h5 class="card-title mb-0">All Products ({{ products|length }} total)</h5>
     </div>
+
+    <!-- Card body containing table -->
     <div class="card-body">
         {% if products %}
+        <!-- Table container, only shows if products exist -->
         <div class="table-responsive">
             <table class="table table-striped table-hover">
+                <!-- Table header row -->
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>ID</th> <!-- Product ID -->
+                        <th>Image</th> <!-- Product image thumbnail -->
+                        <th>Name</th> <!-- Product name -->
+                        <th>Category</th> <!-- Product category -->
+                        <th>Price</th> <!-- Product price -->
+                        <th>Stock</th> <!-- Stock quantity -->
+                        <th>Status</th> <!-- Active/Inactive -->
+                        <th>Actions</th> <!-- Edit/Delete buttons -->
                     </tr>
                 </thead>
+
                 <tbody>
                     {% for product in products %}
+                    <!-- Table row for a single product -->
                     <tr>
-                        <td>{{ product.prod_id }}</td>
+                        <td>{{ product.prod_id }}</td> <!-- Display product ID -->
                         <td>
                             {% if product.image_url %}
+                            <!-- Show product image if available -->
                             <img src="{{ url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" class="img-thumbnail" style="width: 50px;">
                             {% else %}
+                            <!-- Show placeholder if no image -->
                             <img src="https://via.placeholder.com/50" alt="No image" class="img-thumbnail" style="width: 50px;">
                             {% endif %}
                         </td>
-                        <td>{{ product.name }}</td>
+                        <td>{{ product.name }}</td> <!-- Display product name -->
                         <td>
                             {% if product.category == 'watch' %}
+                            <!-- Category badge for watch -->
                             <span class="badge bg-warning">Wristwatch</span>
                             {% else %}
+                            <!-- Category badge for handbag -->
                             <span class="badge bg-info">Handbag</span>
                             {% endif %}
                         </td>
-                        <td>${{ "%.2f"|format(product.price) }}</td>
+                        <td>${{ "%.2f"|format(product.price) }}</td> <!-- Format price to 2 decimal places -->
                         <td>
                             {% if product.stock_level > 10 %}
+                            <!-- Stock level green badge for >10 -->
                             <span class="badge bg-success">{{ product.stock_level }}</span>
                             {% elif product.stock_level > 0 %}
+                            <!-- Stock level yellow badge for 1-10 -->
                             <span class="badge bg-warning">{{ product.stock_level }}</span>
                             {% else %}
+                            <!-- Stock level red badge for 0 -->
                             <span class="badge bg-danger">Out of Stock</span>
                             {% endif %}
                         </td>
                         <td>
                             {% if product.stock_level > 0 %}
+                            <!-- Active status if stock available -->
                             <span class="badge bg-success">Active</span>
                             {% else %}
+                            <!-- Inactive status if no stock -->
                             <span class="badge bg-secondary">Inactive</span>
                             {% endif %}
                         </td>
                         <td>
+                            <!-- Edit button linking to edit product page -->
                             <a href="{{ url_for('admin.edit_product', product_id=product.prod_id) }}" 
                                class="btn btn-sm btn-outline-primary" title="Edit">
                                 <i class="bi bi-pencil"></i>
                             </a>
+
+                            <!-- Delete button inside a form -->
                             <form method="POST" action="{{ url_for('admin.delete_product', product_id=product.prod_id) }}" 
                                   class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
@@ -102,11 +134,13 @@
             </table>
         </div>
         {% else %}
+        <!-- Empty state when no products exist -->
         <div class="text-center py-4">
             <i class="bi bi-inbox display-1 text-muted"></i>
             <h4 class="text-muted">No Products Yet</h4>
             <p class="text-muted">Get started by adding your first product!</p>
             <div>
+                <!-- Add product buttons if table is empty -->
                 <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addProductModal">
                     <i class="bi bi-plus-circle"></i> Add Product
                 </button>
@@ -119,47 +153,62 @@
     </div>
 </div>
 
-<!-- Add Single Product Modal -->
+<!-- Modal: Add Single Product -->
 <div class="modal fade" id="addProductModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <!-- Modal header -->
             <div class="modal-header">
                 <h5 class="modal-title">Add New Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
+            <!-- Modal body: Add product form -->
             <form method="POST" action="{{ url_for('admin.manage_products') }}" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
+                {{ form.hidden_tag() }} <!-- CSRF token & hidden fields -->
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
+                            <!-- Product Name field -->
                             <label class="form-label">Product Name</label>
                             {{ form.name(class="form-control", placeholder="Enter product name") }}
                         </div>
                         <div class="col-md-6 mb-3">
+                            <!-- Product Category dropdown -->
                             <label class="form-label">Product Type</label>
                             {{ form.category(class="form-select") }}
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
+                            <!-- Price input field -->
                             <label class="form-label">Price</label>
                             {{ form.price(class="form-control", placeholder="0.00", step="0.01") }}
                         </div>
                         <div class="col-md-6 mb-3">
+                            <!-- Stock quantity input field -->
                             <label class="form-label">Stock Quantity</label>
                             {{ form.stock_level(class="form-control", placeholder="0") }}
                         </div>
                     </div>
+
+                    <!-- Product Description field -->
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         {{ form.description(class="form-control", rows="3", placeholder="Product description") }}
                     </div>
+
+                    <!-- Product Image upload -->
                     <div class="mb-3">
                         <label class="form-label">Product Image</label>
                         {{ form.image(class="form-control") }}
                         <small class="form-text text-muted">JPG, PNG, GIF only</small>
                     </div>
                 </div>
+
+                <!-- Modal footer with action buttons -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" name="submit" value="single" class="btn btn-primary">Add Product</button>
@@ -169,17 +218,22 @@
     </div>
 </div>
 
-<!-- Batch Upload Modal -->
+<!-- Modal: Batch Upload Products -->
 <div class="modal fade" id="batchUploadModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <!-- Modal header -->
             <div class="modal-header">
                 <h5 class="modal-title">Batch Upload Products (CSV)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
+            <!-- Modal body: Batch upload form -->
             <form method="POST" action="{{ url_for('admin.manage_products') }}" enctype="multipart/form-data">
-                {{ batch_form.hidden_tag() }}
+                {{ batch_form.hidden_tag() }} <!-- CSRF token -->
+
                 <div class="modal-body">
+                    <!-- CSV file input -->
                     <div class="mb-3">
                         <label class="form-label">CSV File</label>
                         {{ batch_form.csv_file(class="form-control") }}
@@ -188,11 +242,15 @@
                             Optional: <code>description, image_url</code> (e.g. <code>/static/uploads/products/img.jpg</code>)
                         </small>
                     </div>
+
+                    <!-- Sample CSV information -->
                     <div class="alert alert-info">
                         <strong>Sample CSV Format:</strong><br>
                         <code>name,category,price,stock_level,description,image_url</code><br>
                         <code>Luxury Handbag,handbag,89.99,15,Leather with gold,/static/uploads/products/h1.jpg</code>
                     </div>
+
+                    <!-- Download sample CSV button -->
                     <div class="text-center">
                         <a href="{{ url_for('static', filename='templates/sample_products.csv') }}" 
                            class="btn btn-sm btn-outline-info">
@@ -200,6 +258,8 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" name="submit" value="batch" class="btn btn-success">
@@ -210,4 +270,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

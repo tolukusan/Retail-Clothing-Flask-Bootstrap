@@ -1,76 +1,101 @@
-{% extends "admin/base.html" %}
+{% extends "admin/base.html" %} <!-- Extend the admin base template for consistent layout -->
 
-{% block title %}Edit Product{% endblock %}
+{% block title %}Edit Product{% endblock %} <!-- Browser tab title -->
 
 {% block content %}
+
+<!-- Page header with title and back button -->
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Edit Product</h1>
-    <a href="{{ url_for('admin.manage_products') }}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Products
+    <h1 class="h2">Edit Product</h1> <!-- Page heading -->
+    <a href="{{ url_for('admin.manage_products') }}" class="btn btn-secondary"> <!-- Back button to manage products page -->
+        <i class="bi bi-arrow-left"></i> Back to Products <!-- Arrow icon with label -->
     </a>
 </div>
 
-<!-- Flash Messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<!-- Flash messages for success or error -->
+{% with messages = get_flashed_messages(with_categories=true) %} <!-- Retrieve flash messages with categories -->
+    {% if messages %} <!-- Check if there are any messages -->
+        {% for category, message in messages %} <!-- Loop over each message -->
+            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show"> <!-- Alert box, red if error, green if success -->
+                {{ message }} <!-- Display the flash message -->
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button> <!-- Dismiss button for the alert -->
             </div>
         {% endfor %}
     {% endif %}
 {% endwith %}
 
+<!-- Product edit form card -->
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title mb-0">Edit Product #{{ product.prod_id }}</h5>
+        <h5 class="card-title mb-0">Edit Product #{{ product.prod_id }}</h5> <!-- Card title with product ID -->
     </div>
     <div class="card-body">
-        <form method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <div class="row">
-                <div class="col-md-6">
+        <form method="POST" enctype="multipart/form-data"> <!-- Form for editing product, supports file upload -->
+            {{ form.hidden_tag() }} <!-- CSRF token and hidden fields -->
+
+            <div class="row"> <!-- Form layout row -->
+                <div class="col-md-6"> <!-- Left column for main product details -->
+
+                    <!-- Product Name input -->
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
-                        {{ form.name(class="form-control", placeholder="Enter product name") }}
+                        {{ form.name(class="form-control", placeholder="Enter product name") }} <!-- Render WTForms field with class and placeholder -->
                     </div>
+
+                    <!-- Product Type / Category select -->
                     <div class="mb-3">
                         <label class="form-label">Product Type</label>
-                        {{ form.category(class="form-select") }}
+                        {{ form.category(class="form-select") }} <!-- Render select field with Bootstrap styling -->
                     </div>
+
+                    <!-- Price input -->
                     <div class="mb-3">
                         <label class="form-label">Price</label>
-                        {{ form.price(class="form-control", placeholder="0.00", step="0.01") }}
+                        {{ form.price(class="form-control", placeholder="0.00", step="0.01") }} <!-- Number input with step for decimals -->
                     </div>
+
+                    <!-- Stock Quantity input -->
                     <div class="mb-3">
                         <label class="form-label">Stock Quantity</label>
-                        {{ form.stock_level(class="form-control", placeholder="0") }}
+                        {{ form.stock_level(class="form-control", placeholder="0") }} <!-- Numeric input for stock quantity -->
                     </div>
-                </div>
-                <div class="col-md-6">
+
+                </div> <!-- End left column -->
+
+                <div class="col-md-6"> <!-- Right column for description and image -->
+
+                    <!-- Product Description textarea -->
                     <div class="mb-3">
                         <label class="form-label">Description</label>
-                        {{ form.description(class="form-control", placeholder="Product description", rows="5") }}
+                        {{ form.description(class="form-control", placeholder="Product description", rows="5") }} <!-- Multi-line textarea -->
                     </div>
+
+                    <!-- Product Image input -->
                     <div class="mb-3">
                         <label class="form-label">Product Image</label>
-                        {{ form.image(class="form-control") }}
-                        <small class="form-text text-muted">Upload JPG, PNG, or GIF images</small>
-                        {% if product.image_url %}
+                        {{ form.image(class="form-control") }} <!-- File input field -->
+                        <small class="form-text text-muted">Upload JPG, PNG, or GIF images</small> <!-- Hint for acceptable image formats -->
+
+                        {% if product.image_url %} <!-- If a current image exists -->
                         <div class="mt-2">
                             <p>Current Image:</p>
-                            <img src="{{ url_for('static', filename=product.image_url) }}" alt="Current product image" style="max-width: 100px; max-height: 100px;" class="img-thumbnail">
+                            <img src="{{ url_for('static', filename=product.image_url) }}" alt="Current product image" style="max-width: 100px; max-height: 100px;" class="img-thumbnail"> <!-- Show current image thumbnail -->
                         </div>
                         {% endif %}
+
                     </div>
-                </div>
-            </div>
+
+                </div> <!-- End right column -->
+            </div> <!-- End row -->
+
+            <!-- Form buttons -->
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Update Product</button>
-                <a href="{{ url_for('admin.manage_products') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update Product</button> <!-- Submit button -->
+                <a href="{{ url_for('admin.manage_products') }}" class="btn btn-secondary">Cancel</a> <!-- Cancel button redirects to manage products -->
             </div>
-        </form>
-    </div>
-</div>
-{% endblock %}
+
+        </form> <!-- End form -->
+    </div> <!-- End card body -->
+</div> <!-- End card -->
+
+{% endblock %} <!-- End content block -->

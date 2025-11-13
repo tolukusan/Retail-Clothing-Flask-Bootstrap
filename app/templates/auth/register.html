@@ -2,47 +2,172 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="auth-wrapper">
-    <div class="auth-container" id="authBox">
-        <div class="form-container">
-            <form id="register-form" method="POST" action="{{ url_for('auth.register') }}">
-                {{ form.hidden_tag() }}
-                <h3>Register</h3>
-
-                <div class="form-group">
-                    {{ form.name.label(class="form-label") }}
-                    {{ form.name(class="form-control", placeholder="Full Name") }}
+<div class="auth-page">
+    <div class="auth-container register-layout">
+        <!-- Left Side: Panel -->
+        <div class="auth-panel-section">
+            <div class="auth-panel-background">
+                <div class="panel-circle panel-circle-1"></div>
+                <div class="panel-circle panel-circle-2"></div>
+                <div class="panel-circle panel-circle-3"></div>
+            </div>
+            
+            <div class="auth-panel-content">
+                <div class="panel-icon">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                </div>
+                <h2 class="panel-title">Already a Member?</h2>
+                <p class="panel-text">Welcome back! Sign in to access your account, view your orders, and continue shopping our premium collection.</p>
+                
+                <div class="panel-features">
+                    <div class="panel-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Track Your Orders</span>
+                    </div>
+                    <div class="panel-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Manage Your Wallet</span>
+                    </div>
+                    <div class="panel-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Quick Checkout</span>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    {{ form.email.label(class="form-label") }}
-                    {{ form.email(class="form-control", placeholder="Email Address") }}
-                </div>
-
-                <div class="form-group">
-                    {{ form.password.label(class="form-label") }}
-                    {{ form.password(class="form-control", placeholder="Password") }}
-                </div>
-
-                <div class="form-group">
-                    {{ form.confirm_password.label(class="form-label") }}
-                    {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
-                </div>
-
-                <button class="btn btn-primary" type="submit">Register</button>
-                <a href="{{ url_for('main.index') }}" class="back-home">← Back to Home</a>
-            </form>
+                <a href="{{ url_for('auth.login') }}" class="panel-btn">
+                    <span>Sign In</span>
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
         </div>
 
-        <div class="panel" id="panelText">
-            <h2>Welcome Back!</h2>
-            <p>Sign in to access your account and explore our exclusive O&T collection.</p>
-            <button id="auth-toggle-btn" data-target-url="{{ url_for('auth.login') }}">Login</button>
+        <!-- Right Side: Form -->
+        <div class="auth-form-section">
+            <div class="auth-form-wrapper">
+                <!-- Logo/Brand -->
+                <div class="auth-brand">
+                    <div class="auth-brand-icon register-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <h2 class="auth-brand-title">Create Account</h2>
+                    <p class="auth-brand-subtitle">Join O&T Store and start your journey</p>
+                </div>
+
+                <!-- Register Form -->
+                <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Name Field -->
+                    <div class="form-group-auth">
+                        <label for="name" class="form-label-auth">
+                            <i class="bi bi-person-fill"></i>
+                            {{ form.name.label.text }}
+                        </label>
+                        <div class="input-wrapper-auth">
+                            {{ form.name(class="form-control-auth", 
+                               placeholder="Enter your full name",
+                               id="name") }}
+                            <span class="input-icon">
+                                <i class="bi bi-person"></i>
+                            </span>
+                        </div>
+                        {% if form.name.errors %}
+                        <div class="error-message-auth">
+                            {% for error in form.name.errors %}
+                            <i class="bi bi-exclamation-circle"></i>
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group-auth">
+                        <label for="email" class="form-label-auth">
+                            <i class="bi bi-envelope-fill"></i>
+                            {{ form.email.label.text }}
+                        </label>
+                        <div class="input-wrapper-auth">
+                            {{ form.email(class="form-control-auth", 
+                               placeholder="Enter your email address",
+                               id="email") }}
+                            <span class="input-icon">
+                                <i class="bi bi-at"></i>
+                            </span>
+                        </div>
+                        {% if form.email.errors %}
+                        <div class="error-message-auth">
+                            {% for error in form.email.errors %}
+                            <i class="bi bi-exclamation-circle"></i>
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group-auth">
+                        <label for="password" class="form-label-auth">
+                            <i class="bi bi-key-fill"></i>
+                            {{ form.password.label.text }}
+                        </label>
+                        <div class="input-wrapper-auth">
+                            {{ form.password(class="form-control-auth", 
+                               placeholder="Create a strong password",
+                               id="password") }}
+                            <span class="input-icon">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                        </div>
+                        {% if form.password.errors %}
+                        <div class="error-message-auth">
+                            {% for error in form.password.errors %}
+                            <i class="bi bi-exclamation-circle"></i>
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="form-group-auth">
+                        <label for="confirm_password" class="form-label-auth">
+                            <i class="bi bi-shield-lock-fill"></i>
+                            {{ form.confirm_password.label.text }}
+                        </label>
+                        <div class="input-wrapper-auth">
+                            {{ form.confirm_password(class="form-control-auth", 
+                               placeholder="Re-enter your password",
+                               id="confirm_password") }}
+                            <span class="input-icon">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                        </div>
+                        {% if form.confirm_password.errors %}
+                        <div class="error-message-auth">
+                            {% for error in form.confirm_password.errors %}
+                            <i class="bi bi-exclamation-circle"></i>
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="auth-submit-btn register-btn">
+                        <i class="bi bi-person-plus-fill"></i>
+                        <span>Create Account</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <!-- Back to Home Link -->
+                    <a href="{{ url_for('main.index') }}" class="back-home-link">
+                        <i class="bi bi-arrow-left"></i>
+                        <span>Back to Home</span>
+                    </a>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

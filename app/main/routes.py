@@ -21,3 +21,5 @@ def product_detail(prod_id):
     product = Product.query.get_or_404(prod_id)
     return render_template('main/product_detail.html', product=product)
 
+
+
